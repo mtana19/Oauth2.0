@@ -1,3 +1,5 @@
+const mongoose = require('mongoose');
+
 let OAuthAccessTokenModel = mongoose.model('OAuthAccessToken', new mongoose.Schema({
     user: { type: mongoose.Schema.Types.ObjectId, ref: 'User'},
     client: { type: mongoose.Schema.Types.ObjectId, ref: 'OAuthClient'},
@@ -67,4 +69,58 @@ module.exports.getClient = (clientId, clientSecret) => {
     return OAuthClientModel.findOne(params);
 };
 
-module.exports.getUser = async (username, password)
+module.exports.getUser = async (username, password) => {
+    let UserModel = mongoose.model('User');
+    let user = await UserModel.findOne({ username: username });
+    if(user.validatePassword(password)){
+        return user;
+    }
+    return false;
+};
+
+module.exports.getUserFromClient = (client) => {
+    return {};
+}
+
+module.exports.saveToken = async (token, client, user) => {
+    let accessToken = (await OAuthAccessTokenModel.create({
+        user: user.id || null,
+        client: client.id,
+        accessToken: token.accessToken,
+        accessTokenExpiresAt: token.accessTokenExpiresAt,
+        refreshToken: token.refreshToken,
+        refreshTokenExpiresAt: token.refreshTokenExpiresAt,
+        scope: token.scope,
+    })).toObject();
+
+    if(!accessToken.user) {
+        accessToken.user = {};
+    }
+
+    return accessToken;
+};
+
+module.exports.saveAuthorizationCode = (code, client, user) => {
+    let authCode = new OAuthCodeModel({
+        user: user.id,
+        client: client.id,
+        authorizationCode: code.authorizationCode,
+        expiresAt: code.expiresAt,
+        scope: code.scope
+    });
+    return authCode.save();
+};
+
+module.exports.revokeToken = async (accessToken) => {
+    let result = await OAuthAccessTokenModel.deleteOne({
+        accessToken: accessToken
+    });
+    return result.deletedCount > 0;
+};
+
+module.exports.revokeAuthorizationCode = async(code) => {
+    let result = await OAuthCodeModel.deleteOne({
+        authorizationCode: code.authorizationCode
+    });
+    return result.deletedCount > 0;
+};
