@@ -15,11 +15,11 @@ router.post('/oauth/access_token', oauth.token({
     }
 }));
 
-router.get('oauth/authenticate', async(req,res,next) => {
+router.get('/oauth/authenticate', async(req,res,next) => {
     return res.render('authenticate')
 });
 
-router.post('oauth/authenticate', async(req,res,next) => {
+router.post('/oauth/authenticate', async(req,res,next) => {
     let UserModel = mongoose.model('User');
     req.body.user = await UserModel.findOne({ username: req.body.username });
 

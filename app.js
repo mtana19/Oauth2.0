@@ -50,11 +50,11 @@ let db = mongoose.connection;
 db.on('error', console.error.bind(console,'MongoDB error: '));
 db.once('open', console.log.bind(console,'MongoDB connection successful'));
 
-require('./models/user');
-require('./models/oauth');
+// require('./models/user');
+// require('./models/oauth');
 
-// app.use('/', indexRouter);
-// app.use('/users', usersRouter);
+app.use('/', indexRouter);
+app.use('/users', usersRouter);
 app.use(require('./routes'));
 
 // catch 404 and forward to error handler
