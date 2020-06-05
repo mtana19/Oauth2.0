@@ -8,16 +8,16 @@ var mongoose = require('mongoose');
 var session = require('express-session');
 var sassMiddleware = require('node-sass-middleware');
 var cors = require('cors');
+var flash = require('connect-flash');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
-var flash = require('connect-flash');
 
 var app = express();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');
+app.set('view engine', 'hbs');
 
 app.use(cors());
 app.use(logger('dev'));

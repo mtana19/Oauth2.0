@@ -5,7 +5,7 @@ let OAuthAccessTokenModel = mongoose.model('OAuthAccessToken', new mongoose.Sche
     client: { type: mongoose.Schema.Types.ObjectId, ref: 'OAuthClient'},
     accessToken: { type: String },
     accessTokenExpiresAt: { type: Date },
-    refreshToekn: { type: String },
+    refreshToken: { type: String },
     refreshTokenExpiresAt: { type: Date },
     scope: {type: String }
 },{
@@ -26,7 +26,7 @@ let OAuthClientModel = mongoose.model('OAuthClient', new mongoose.Schema({
     user: {type: mongoose.Schema.Types.ObjectId, ref: 'User' },
     clientId: { type: String },
     clientSecret: { type: String },
-    redirectUris: {type: Array },
+    redirectUris: { type: Array },
     grants: { type: Array },
 },{
     timestamps: true
@@ -49,14 +49,14 @@ module.exports.getAccessToken = async (accessToken) => {
     return _accessToken;
 };
 
-module.exports.refreshTokenModel = (refreshToken) => {
-    return OAuthAccessTokenModel.findOne({ refreshToken })
+module.exports.getRefreshTokenModel = (refreshToken) => {
+    return OAuthAccessTokenModel.findOne({ refreshToken: refreshToken })
     .populate('user')
     .populate('client');
 };
 
 module.exports.getAuthorizationCode = (code) => {
-    return OAuthCodeModel.find({ authorizationCode: code })
+    return OAuthCodeModel.findOne({ authorizationCode: code })
     .populate('user')
     .populate('client');
 };
@@ -113,7 +113,7 @@ module.exports.saveAuthorizationCode = (code, client, user) => {
 
 module.exports.revokeToken = async (accessToken) => {
     let result = await OAuthAccessTokenModel.deleteOne({
-        accessToken: accessToken
+        accessToken: accessToken.refreshToken
     });
     return result.deletedCount > 0;
 };

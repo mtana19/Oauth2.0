@@ -5,10 +5,14 @@ const OAuthModel = require('../models/oauth');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-    res.render('index', { title: 'Express' });
+    res.render('index', { title: 'Node Express Example' });
 });
 
-router.get('/register', async (req, res, next) => {
+router.get('/register', (req, res, next) => {
+    res.render('register', { message: req.flash('message') });
+});
+
+router.post('/register', async (req, res, next) => {
     if(req.body.password !== req.body.confirmPassword) {
         return res.send('Passwords does not match', 422);
     }
