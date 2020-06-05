@@ -9,18 +9,20 @@ let UserSchema = new mongoose.Schema({
     password: { type: String },
     email: { type: String, unique: true },
     verificationCode: { type: String },
-    verifiedAt: {type: Date },
-},{
+    verifiedAt: { type: Date },
+}, {
     timestamps: true,
 });
 
-UserSchema.methods.validatePassword = function(password) {
-    let _password = crypto.pbkdf2Sync(password, env.salt, 10000, 32, 'sha512').toString('hex');
+UserSchema.methods.validatePassword = function (password) {
+    let _password = crypto.pbkdf2Sync(password, env.salt, 10000,
+        32, 'sha512').toString('hex');
     return this.password === _password;
 };
 
-UserSchema.methods.setPassword = function(password) {
-    this.password = crypto.pbkdf2Sync(password, env.salt, 10000, 32, 'sha512').toString('hex');
+UserSchema.methods.setPassword = function (password) {
+    this.password = crypto.pbkdf2Sync(password, env.salt, 10000,
+        32, 'sha512').toString('hex');
 };
 
 mongoose.model('User', UserSchema, 'users');
