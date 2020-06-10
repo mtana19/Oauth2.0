@@ -3,9 +3,10 @@ const mongoose = require('mongoose');
 const crypto = require('crypto');
 const OAuthModel = require('../models/oauth');
 
-/* GET home page. */
-router.get('/', function(req, res, next) {
-    res.render('index', { title: 'Node Express Example' });
+router.get('/', (req, res, next) => {
+    res.render('index', {
+        title: 'Node Express Example'
+    });
 });
 
 router.get('/register', (req, res, next) => {
@@ -13,7 +14,7 @@ router.get('/register', (req, res, next) => {
 });
 
 router.post('/register', async (req, res, next) => {
-    if(req.body.password !== req.body.confirmPassword) {
+    if (req.body.password !== req.body.confirmPassword) {
         return res.send('Passwords does not match', 422);
     }
 
@@ -36,7 +37,7 @@ router.post('/register', async (req, res, next) => {
         return res.send(error.errmsg, 422);
     }
 
-    if(!user) {
+    if (!user) {
         return res.send('Error creating user', 422);
     }
 
@@ -46,13 +47,14 @@ router.post('/register', async (req, res, next) => {
         req.body.clientSecret
     );
 
-    if(!_client) {
+    if (!_client) {
         _client = new OAuthClientModel({
             user: user.id,
             clientId: req.body.clientId,
             clientSecret: req.body.clientSecret,
             redirectUris: req.body.redirectUris.split(','),
-            grants: ['authorization_code', 'client_credentials', 'refresh_token', 'password']
+            grants: ['authorization_code', 'client_credentials',
+                'refresh_token', 'password']
         });
         _client.save();
     }
