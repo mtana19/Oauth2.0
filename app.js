@@ -38,7 +38,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 if (env.isProduction) {
     mongoose.connect(process.env.MONGODB_URI);
 } else {
-    mongoose.connect('mongodb://localhost/oauth', { useNewUrlParser: true });
+    mongoose.connect('mongodb+srv://dre123:6tyt6wxrwqjmv3ip@cluster0-ztdrl.mongodb.net/projectdb?retryWrites=true&w=majority', { useNewUrlParser: true });
     mongoose.set('debug', true);
 }
 mongoose.set('useCreateIndex', true);
