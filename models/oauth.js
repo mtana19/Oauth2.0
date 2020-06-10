@@ -70,9 +70,9 @@ module.exports.getClient = (clientId, clientSecret) => {
     return OAuthClientModel.findOne(params);
 };
 
-module.exports.getUser = async (username, password) => {
+module.exports.getUser = async (email, password) => {
     let UserModel = mongoose.model('User');
-    let user = await UserModel.findOne({ username: username });
+    let user = await UserModel.findOne({ email: email });
     if (user.validatePassword(password)) {
         return user;
     }

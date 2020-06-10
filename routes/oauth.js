@@ -22,13 +22,13 @@ router.get('/oauth/authenticate', async (req, res, next) => {
 router.post('/oauth/authenticate', async (req, res, next) => {
 
     let UserModel = mongoose.model('User');
-    req.body.email = await UserModel.findOne({ email: req.body.email });
+    req.body.user = await UserModel.findOne({ email: req.body.email });
 
     return next();
 }, oauth.authorize({
     authenticateHandler: {
         handle: req => {
-            return req.body.email;
+            return req.body.user;
         }
     }
 }));

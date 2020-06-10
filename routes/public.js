@@ -25,7 +25,6 @@ router.post('/register', async (req, res, next) => {
     let _user = new UserModel({
         firstName: req.body.firstName,
         lastName: req.body.lastName,
-        username: req.body.username,
         email: req.body.email,
         verificationCode: crypto.randomBytes(16).toString('hex'),
     });

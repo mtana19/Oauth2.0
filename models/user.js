@@ -5,7 +5,6 @@ const env = require('../env');
 let UserSchema = new mongoose.Schema({
     firstName: { type: String },
     lastName: { type: String },
-    username: { type: String, unique: true },
     password: { type: String },
     email: { type: String, unique: true },
     verificationCode: { type: String },
